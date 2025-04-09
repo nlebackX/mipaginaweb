@@ -1,0 +1,850 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Biblioteca</title>
+    <style>
+        :root {
+            --primary-color: #02304e;
+            --secondary-color: #06436b;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+ 
+            background-image: url('https://i.pinimg.com/originals/55/01/60/5501609ee45d514d1f2c4a63502045e2.gif'); /* Reemplaza con la ruta de tu GIF */
+            background-size: cover; /* Para que el GIF cubra toda la ventana */
+            background-repeat: no-repeat; /* Para evitar que el GIF se repita */
+            background-attachment: fixed; /* Opcional: para que el GIF se mantenga fijo al hacer scroll */ 
+            color: var(--dark-color);
+            line-height: 1.6;
+            }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            
+    background-image: url('https://img.freepik.com/vector-gratis/fondo-negro-degradado-cubos_23-2149138432.jpg?semt=ais_hybrid&w=740'); 
+    background-size: cover; 
+    background-repeat: no-repeat; 
+    color: white;
+    padding: 15px 0; 
+    margin-bottom: 30px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    min-height: 100px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+        }
+
+        /* Estilo para el contenedor del header para alinear imagen y título */
+        header .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px; /* Espacio entre imagen y título */
+        }
+
+        header img.header-icon {
+             height: 70px; /* Ajusta el tamaño según tu imagen */
+             width: auto;
+        }
+
+        header h1 {
+            margin-bottom: 0; /* Quitar margen inferior del h1 */
+            animation: fadeIn 1s ease-in-out; /* Animación para el título */
+        }
+
+        h1, h2, h3 {
+            margin-bottom: 15px;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .tab {
+            padding: 10px 20px;
+            background-color: #e0e0e0;
+            cursor: pointer;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            margin-right: 5px;
+            transition: all 0.3s ease; /* Transición para hover y active */
+            position: relative; /* Para el movimiento */
+            bottom: 0;
+        }
+
+        .tab:hover {
+            background-color: #d0d0d0;
+            transform: translateY(-3px); /* Animación sutil hacia arriba */
+        }
+
+        .tab.active {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            transform: translateY(-3px); /* Mantiene el desplazamiento */
+        }
+
+        .content {
+            display: none;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out; /* Animación al mostrar contenido */
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Añadida transición para transform */
+        }
+
+        button:hover {
+            background-color: var(--secondary-color);
+            transform: scale(1.05); /* Animación de escala en hover */
+        }
+
+        /* Hover específico para botones de colores */
+        .btn-danger:hover {
+            background-color: #c0392b;
+             transform: scale(1.05);
+        }
+        .btn-success:hover {
+            background-color: #27ae60;
+             transform: scale(1.05);
+        }
+        .btn-warning:hover {
+            background-color: #e67e22;
+             transform: scale(1.05);
+        }
+
+        .btn-danger { background-color: var(--accent-color); }
+        .btn-success { background-color: var(--success-color); }
+        .btn-warning { background-color: var(--warning-color); }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        tbody tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* Animación para filas de la tabla */
+        tbody tr.row-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .search-container {
+            display: flex;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .search-container input {
+            flex: 1;
+        }
+
+        .filter-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .alert {
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            animation: slideInDown 0.5s ease-out; /* Animación para alertas */
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .badge-success { background-color: var(--success-color); }
+        .badge-warning { background-color: var(--warning-color); }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        /* Keyframes para animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideInDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header .container {
+                 flex-direction: column; /* Apila icono y título en móviles */
+                 text-align: center;
+            }
+            header img.header-icon {
+                height: 40px; /* Ajusta tamaño en móvil */
+            }
+            form {
+                grid-template-columns: 1fr;
+            }
+            .filter-container {
+                grid-template-columns: 1fr;
+            }
+            .tabs {
+                flex-wrap: wrap; /* Permite que las pestañas pasen a la siguiente línea */
+            }
+            .tab {
+                margin-bottom: 5px; /* Espacio si se envuelven */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <img src="https://media.fortniteapi.io/images/cosmetics/68b1124cf813cc6fcdd7b089d368136a/v2/icon_background.png" alt="Logo Biblioteca" class="header-icon">
+            <h1>Sistema de Gestión de Biblioteca</h1>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" data-tab="registro">Registro de Libros</div>
+            <div class="tab" data-tab="listado">Listado de Libros</div>
+            <div class="tab" data-tab="prestamos">Gestión de Préstamos</div>
+        </div>
+
+        <div id="alerts"></div>
+
+        <div class="content active" id="registro">
+            <h2>Registrar Nuevo Libro</h2>
+            <form id="libro-form">
+                <div class="form-group">
+                    <label for="titulo">Título*</label>
+                    <input type="text" id="titulo" name="titulo" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="autor">Autor*</label>
+                    <input type="text" id="autor" name="autor" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="genero">Género*</label>
+                    <select id="genero" name="genero" required>
+                        <option value="">Seleccionar género</option>
+                        <option value="Ficción">Ficción</option>
+                        <option value="No Ficción">No Ficción</option>
+                        <option value="Fantasía">Fantasía</option>
+                        <option value="Ciencia Ficción">Ciencia Ficción</option>
+                        <option value="Misterio">Misterio</option>
+                        <option value="Romance">Romance</option>
+                        <option value="Historia">Historia</option>
+                        <option value="Biografía">Biografía</option>
+                        <option value="Poesía">Poesía</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="anio">Año de Publicación*</label>
+                    <input type="number" id="anio" name="anio" min="1000" max="2025" required>
+                </div>
+
+                <div class="form-group" style="grid-column: span 2;">
+                    <button type="submit">Registrar Libro</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="content" id="listado">
+            <h2>Listado de Libros</h2>
+
+            <div class="search-container">
+                <input type="text" id="buscar" placeholder="Buscar por título, autor o género...">
+                <button id="btn-buscar">Buscar</button>
+            </div>
+
+            <div class="filter-container">
+                <div class="form-group">
+                    <label for="filtro-genero">Filtrar por Género</label>
+                    <select id="filtro-genero">
+                        <option value="">Todos los géneros</option>
+                        <option value="Ficción">Ficción</option>
+                        <option value="No Ficción">No Ficción</option>
+                        <option value="Fantasía">Fantasía</option>
+                        <option value="Ciencia Ficción">Ciencia Ficción</option>
+                        <option value="Misterio">Misterio</option>
+                        <option value="Romance">Romance</option>
+                        <option value="Historia">Historia</option>
+                        <option value="Biografía">Biografía</option>
+                        <option value="Poesía">Poesía</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="filtro-anio">Filtrar por Año</label>
+                    <select id="filtro-anio">
+                        <option value="">Todos los años</option>
+                        </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="filtro-disponibilidad">Disponibilidad</label>
+                    <select id="filtro-disponibilidad">
+                        <option value="">Todos</option>
+                        <option value="disponible">Disponibles</option>
+                        <option value="prestado">Prestados</option>
+                    </select>
+                </div>
+            </div>
+
+            <table id="tabla-libros">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Género</th>
+                        <th>Año</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+
+        <div class="content" id="prestamos">
+            <h2>Gestión de Préstamos</h2>
+
+            <div id="form-prestamo">
+                <h3>Registrar Préstamo</h3>
+                <form id="prestamo-form">
+                    <div class="form-group">
+                        <label for="libro-id">Libro*</label>
+                        <select id="libro-id" name="libro-id" required>
+                            <option value="">Seleccionar libro</option>
+                            </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nombre-persona">Nombre de la Persona*</label>
+                        <input type="text" id="nombre-persona" name="nombre-persona" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fecha-prestamo">Fecha de Préstamo*</label>
+                        <input type="date" id="fecha-prestamo" name="fecha-prestamo" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fecha-devolucion">Fecha de Devolución Esperada*</label>
+                        <input type="date" id="fecha-devolucion" name="fecha-devolucion" required>
+                    </div>
+
+                    <div class="form-group" style="grid-column: span 2;">
+                        <button type="submit">Registrar Préstamo</button>
+                    </div>
+                </form>
+            </div>
+
+            <h3>Libros Prestados</h3>
+            <table id="tabla-prestamos">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Prestado a</th>
+                        <th>Fecha de Préstamo</th>
+                        <th>Fecha de Devolución</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Gestión de las pestañas
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Mostrar mensajes de alerta
+        function mostrarAlerta(mensaje, tipo) {
+            const alertsContainer = document.getElementById('alerts');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${tipo}`;
+            alert.textContent = mensaje;
+            // Limpiar alertas anteriores antes de añadir una nueva
+            alertsContainer.innerHTML = '';
+            alertsContainer.appendChild(alert);
+
+            setTimeout(() => {
+                 // Añadir clase para desvanecer antes de remover (opcional)
+                alert.style.opacity = '0';
+                alert.style.transition = 'opacity 0.5s ease-out';
+                setTimeout(() => alert.remove(), 500); // Remover después de la transición
+            }, 3000); // Tiempo que la alerta es visible
+        }
+
+        // Estructura de datos para libros
+        let libros = JSON.parse(localStorage.getItem('libros')) || [];
+        let prestamos = JSON.parse(localStorage.getItem('prestamos')) || [];
+
+        // Generar ID único
+        function generarId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        // Guardar en localStorage
+        function guardarDatos() {
+            localStorage.setItem('libros', JSON.stringify(libros));
+            localStorage.setItem('prestamos', JSON.stringify(prestamos));
+        }
+
+        // Formulario de registro de libros
+        const libroForm = document.getElementById('libro-form');
+        libroForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const titulo = document.getElementById('titulo').value.trim();
+            const autor = document.getElementById('autor').value.trim();
+            const genero = document.getElementById('genero').value;
+            const anio = document.getElementById('anio').value;
+
+            if (!titulo || !autor || !genero || !anio) {
+                mostrarAlerta('Por favor, complete todos los campos obligatorios.', 'danger');
+                return;
+            }
+
+            const nuevoLibro = {
+                id: generarId(), titulo, autor, genero, anio: parseInt(anio), disponible: true
+            };
+            libros.push(nuevoLibro);
+            guardarDatos();
+            mostrarAlerta('Libro registrado con éxito', 'success');
+            libroForm.reset();
+            actualizarListadoLibros();
+            actualizarSelectorLibros();
+            poblarSelectorAnios(); // Actualizar años si es un año nuevo
+        });
+
+        // Actualizar listado de libros
+        function actualizarListadoLibros() {
+            const tablaLibros = document.querySelector('#tabla-libros tbody');
+            tablaLibros.innerHTML = '';
+            const busqueda = document.getElementById('buscar').value.toLowerCase();
+            const filtroGenero = document.getElementById('filtro-genero').value;
+            const filtroAnio = document.getElementById('filtro-anio').value;
+            const filtroDisponibilidad = document.getElementById('filtro-disponibilidad').value;
+
+            let librosFiltrados = libros.filter(libro => {
+                const coincideBusqueda = !busqueda || libro.titulo.toLowerCase().includes(busqueda) || libro.autor.toLowerCase().includes(busqueda) || libro.genero.toLowerCase().includes(busqueda);
+                const coincideGenero = !filtroGenero || libro.genero === filtroGenero;
+                const coincideAnio = !filtroAnio || libro.anio === parseInt(filtroAnio);
+                const coincideDisponibilidad = !filtroDisponibilidad || (filtroDisponibilidad === 'disponible' && libro.disponible) || (filtroDisponibilidad === 'prestado' && !libro.disponible);
+                return coincideBusqueda && coincideGenero && coincideAnio && coincideDisponibilidad;
+            });
+
+            if (librosFiltrados.length === 0) {
+                tablaLibros.innerHTML = `<tr><td colspan="6" style="text-align: center;">No se encontraron libros.</td></tr>`;
+                return;
+            }
+
+            librosFiltrados.forEach(libro => {
+                const fila = document.createElement('tr');
+                fila.classList.add('row-fade-in'); // Añadir clase para animación
+                fila.innerHTML = `
+                    <td>${libro.titulo}</td>
+                    <td>${libro.autor}</td>
+                    <td>${libro.genero}</td>
+                    <td>${libro.anio}</td>
+                    <td>
+                        <span class="badge ${libro.disponible ? 'badge-success' : 'badge-warning'}">
+                            ${libro.disponible ? 'Disponible' : 'Prestado'}
+                        </span>
+                    </td>
+                    <td class="action-buttons">
+                        ${libro.disponible ?
+                            `<button class="btn-warning prestar-libro" data-id="${libro.id}">Prestar</button>` :
+                            ''}
+                        <button class="btn-danger eliminar-libro" data-id="${libro.id}">Eliminar</button>
+                    </td>
+                `;
+                tablaLibros.appendChild(fila);
+            });
+
+            // Añadir event listeners a los botones (después de crear las filas)
+            attachEventListenersLibros();
+        }
+
+        // Función separada para añadir listeners a botones de libros
+        function attachEventListenersLibros() {
+            document.querySelectorAll('.eliminar-libro').forEach(btn => {
+                btn.removeEventListener('click', handleEliminarLibro); // Prevenir duplicados
+                btn.addEventListener('click', handleEliminarLibro);
+            });
+            document.querySelectorAll('.prestar-libro').forEach(btn => {
+                btn.removeEventListener('click', handlePrestarLibro); // Prevenir duplicados
+                btn.addEventListener('click', handlePrestarLibro);
+            });
+        }
+
+        function handleEliminarLibro(e) {
+            const id = e.target.dataset.id;
+            eliminarLibro(id);
+        }
+
+        function handlePrestarLibro(e) {
+            const id = e.target.dataset.id;
+            document.getElementById('libro-id').value = id;
+            document.querySelector('[data-tab="prestamos"]').click();
+            document.getElementById('nombre-persona').focus(); // Poner foco en el siguiente campo
+        }
+
+
+        // Actualizar selector de libros para préstamos
+        function actualizarSelectorLibros() {
+            const selectorLibros = document.getElementById('libro-id');
+            const currentValue = selectorLibros.value; // Guardar valor actual si existe
+            selectorLibros.innerHTML = '<option value="">Seleccionar libro</option>';
+            const librosDisponibles = libros.filter(libro => libro.disponible);
+
+            librosDisponibles.forEach(libro => {
+                const option = document.createElement('option');
+                option.value = libro.id;
+                option.textContent = `${libro.titulo} - ${libro.autor}`;
+                selectorLibros.appendChild(option);
+            });
+             // Restaurar valor si todavía es válido
+            if (librosDisponibles.some(l => l.id === currentValue)) {
+                selectorLibros.value = currentValue;
+            }
+        }
+
+        // Eliminar libro
+        function eliminarLibro(id) {
+            const libro = libros.find(l => l.id === id);
+            if (libro && !libro.disponible) {
+                mostrarAlerta('No se puede eliminar un libro que está prestado.', 'danger');
+                return;
+            }
+
+            if (confirm(`¿Está seguro de que desea eliminar el libro "${libro.titulo}"?`)) {
+                libros = libros.filter(libro => libro.id !== id);
+                // También eliminar préstamos asociados (si se quisiera, aunque no deberían existir si está disponible)
+                // prestamos = prestamos.filter(p => p.libroId !== id);
+                guardarDatos();
+                mostrarAlerta('Libro eliminado correctamente', 'success');
+                actualizarListadoLibros();
+                actualizarSelectorLibros();
+                poblarSelectorAnios(); // Actualizar años por si era el último de ese año
+            }
+        }
+
+        // Formulario de préstamo
+        const prestamoForm = document.getElementById('prestamo-form');
+        prestamoForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const libroId = document.getElementById('libro-id').value;
+            const nombrePersona = document.getElementById('nombre-persona').value.trim();
+            const fechaPrestamo = document.getElementById('fecha-prestamo').value;
+            const fechaDevolucion = document.getElementById('fecha-devolucion').value;
+
+            if (!libroId || !nombrePersona || !fechaPrestamo || !fechaDevolucion) {
+                mostrarAlerta('Por favor, complete todos los campos obligatorios del préstamo.', 'danger');
+                return;
+            }
+            // Validar fechas
+             if (new Date(fechaDevolucion) < new Date(fechaPrestamo)) {
+                mostrarAlerta('La fecha de devolución no puede ser anterior a la fecha de préstamo.', 'danger');
+                return;
+            }
+
+            const libro = libros.find(libro => libro.id === libroId);
+            if (!libro || !libro.disponible) {
+                mostrarAlerta('El libro seleccionado no está disponible o no existe.', 'danger');
+                return;
+            }
+
+            const nuevoPrestamo = {
+                id: generarId(), libroId, nombrePersona, fechaPrestamo, fechaDevolucion, devuelto: false
+            };
+            libro.disponible = false;
+            prestamos.push(nuevoPrestamo);
+            guardarDatos();
+            mostrarAlerta('Préstamo registrado con éxito', 'success');
+            prestamoForm.reset();
+            actualizarListadoLibros();
+            actualizarSelectorLibros();
+            actualizarListadoPrestamos();
+        });
+
+        // Actualizar listado de préstamos
+        function actualizarListadoPrestamos() {
+            const tablaPrestamos = document.querySelector('#tabla-prestamos tbody');
+            tablaPrestamos.innerHTML = '';
+
+             // Filtrar solo préstamos activos (no devueltos) para mostrar en la tabla principal
+            const prestamosActivos = prestamos.filter(p => !p.devuelto);
+
+
+            if (prestamosActivos.length === 0) {
+                tablaPrestamos.innerHTML = `<tr><td colspan="6" style="text-align: center;">No hay libros prestados actualmente.</td></tr>`;
+                return;
+            }
+
+            prestamosActivos.forEach(prestamo => {
+                const libro = libros.find(l => l.id === prestamo.libroId);
+                const fila = document.createElement('tr');
+                fila.classList.add('row-fade-in'); // Añadir clase para animación
+
+                const hoy = new Date().setHours(0,0,0,0); // Ignorar la hora para comparar solo fechas
+                const fechaDevolucion = new Date(prestamo.fechaDevolucion + 'T00:00:00'); // Asegurar que se tome como inicio del día
+                const vencido = !prestamo.devuelto && fechaDevolucion.getTime() < hoy;
+
+                fila.innerHTML = `
+                    <td>${libro ? libro.titulo : 'Libro no encontrado'}</td>
+                    <td>${prestamo.nombrePersona}</td>
+                    <td>${formatearFecha(prestamo.fechaPrestamo)}</td>
+                    <td>${formatearFecha(prestamo.fechaDevolucion)}${vencido ? ' <span class="badge badge-warning">Vencido</span>' : ''}</td>
+                    <td>
+                         <span class="badge badge-warning">Pendiente</span>
+                    </td>
+                    <td>
+                        <button class="btn-success devolver-libro" data-id="${prestamo.id}">Devolver</button>
+                    </td>
+                `;
+                tablaPrestamos.appendChild(fila);
+            });
+            // Añadir event listeners a los botones de devolución
+             attachEventListenersPrestamos();
+        }
+
+         // Función separada para añadir listeners a botones de préstamos
+        function attachEventListenersPrestamos() {
+            document.querySelectorAll('.devolver-libro').forEach(btn => {
+                 btn.removeEventListener('click', handleDevolverLibro); // Prevenir duplicados
+                 btn.addEventListener('click', handleDevolverLibro);
+            });
+        }
+
+         function handleDevolverLibro(e) {
+            const id = e.target.dataset.id;
+            devolverLibro(id);
+        }
+
+
+        // Devolver libro
+        function devolverLibro(id) {
+            const prestamo = prestamos.find(p => p.id === id);
+            if (!prestamo) {
+                mostrarAlerta('El préstamo no existe.', 'danger'); return;
+            }
+
+            prestamo.devuelto = true; // Marcar como devuelto (se podría quitar del array si se prefiere no guardar historial)
+            // Opcional: Remover el préstamo del array si no se quiere historial
+            // prestamos = prestamos.filter(p => p.id !== id);
+
+            const libro = libros.find(l => l.id === prestamo.libroId);
+            if (libro) {
+                libro.disponible = true;
+            }
+
+            guardarDatos();
+            mostrarAlerta('Libro devuelto correctamente', 'success');
+            actualizarListadoLibros();
+            actualizarSelectorLibros();
+            actualizarListadoPrestamos();
+        }
+
+        // Formatear fecha (YYYY-MM-DD a DD/MM/YYYY)
+        function formatearFecha(fecha) {
+            if (!fecha) return '';
+            const partes = fecha.split('-');
+            if (partes.length !== 3) return fecha; // Devolver original si no está en formato esperado
+            return `${partes[2]}/${partes[1]}/${partes[0]}`;
+        }
+
+        // Función para poblar el selector de años
+        function poblarSelectorAnios() {
+            const selector = document.getElementById('filtro-anio');
+            const currentValue = selector.value; // Guardar valor actual
+            // Guardar el primer option ("Todos los años")
+            const firstOption = selector.options[0];
+            selector.innerHTML = ''; // Limpiar opciones excepto la primera
+            selector.appendChild(firstOption);
+
+
+            // Obtener años únicos de los libros existentes y ordenarlos
+            const anios = [...new Set(libros.map(libro => libro.anio))]
+                           .filter(anio => !isNaN(anio)) // Asegurarse que son números
+                           .sort((a, b) => b - a); // Ordenar descendente (más recientes primero)
+
+            anios.forEach(anio => {
+                const option = document.createElement('option');
+                option.value = anio;
+                option.textContent = anio;
+                selector.appendChild(option);
+            });
+             // Restaurar valor si todavía es válido
+             if (anios.includes(parseInt(currentValue))) {
+                 selector.value = currentValue;
+             } else {
+                 selector.value = ""; // Resetear si el año ya no existe
+             }
+        }
+
+        // Eventos para filtros y búsqueda
+        document.getElementById('btn-buscar').addEventListener('click', actualizarListadoLibros);
+        document.getElementById('buscar').addEventListener('keyup', (e) => {
+            // Actualizar en tiempo real o al presionar Enter
+            //if (e.key === 'Enter') {
+                actualizarListadoLibros();
+            //}
+        });
+
+        document.getElementById('filtro-genero').addEventListener('change', actualizarListadoLibros);
+        document.getElementById('filtro-anio').addEventListener('change', actualizarListadoLibros);
+        document.getElementById('filtro-disponibilidad').addEventListener('change', actualizarListadoLibros);
+
+        // Cargar datos iniciales al cargar la página
+        window.addEventListener('DOMContentLoaded', () => {
+             // Si no hay libros, precargar algunos de ejemplo (opcional)
+            if (libros.length === 0 && prestamos.length === 0) { // Solo si ambos están vacíos
+                const librosEjemplo = [
+                    { id: 'libro1', titulo: 'Cien años de soledad', autor: 'Gabriel García Márquez', genero: 'Ficción', anio: 1967, disponible: true },
+                    { id: 'libro2', titulo: '1984', autor: 'George Orwell', genero: 'Ciencia Ficción', anio: 1949, disponible: true },
+                    { id: 'libro3', titulo: 'El señor de los anillos', autor: 'J.R.R. Tolkien', genero: 'Fantasía', anio: 1954, disponible: false }, // Ejemplo de libro prestado
+                    { id: 'libro4', titulo: 'Sapiens: De animales a dioses', autor: 'Yuval Noah Harari', genero: 'No Ficción', anio: 2011, disponible: true },
+                ];
+                 const prestamosEjemplo = [
+                     { id: 'prestamo1', libroId: 'libro3', nombrePersona: 'Ana López', fechaPrestamo: '2025-03-20', fechaDevolucion: '2025-04-10', devuelto: false }
+                 ];
+                libros = librosEjemplo;
+                prestamos = prestamosEjemplo;
+                guardarDatos();
+                mostrarAlerta('Se cargaron datos de ejemplo.', 'success'); // Informar al usuario
+            }
+
+            actualizarListadoLibros();
+            actualizarSelectorLibros();
+            actualizarListadoPrestamos();
+            poblarSelectorAnios();
+        });
+    </script>
+</body>
+</html>
